@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
-@Table(name = "product")
+@Table(name = "products")
 @Entity(name = "Product")
 @Getter
 @Setter
@@ -24,7 +24,7 @@ public class Product {
     private UUID id;
     private String name;
     private String description;
-    private String price;
+    private Float price;
     private int stock;
     @ManyToOne
     @JoinColumn(name = "category_id")
