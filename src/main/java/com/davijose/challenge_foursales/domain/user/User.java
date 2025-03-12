@@ -13,7 +13,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-@Table(name = "user")
+@Table(name = "users")
 @Entity(name = "User")
 @Getter
 @Setter
