@@ -6,8 +6,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Table(name = "order")
@@ -25,6 +28,8 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    @CreationTimestamp
+    private Date createdAt;
+    @UpdateTimestamp
+    private Date updateAt;
 }
