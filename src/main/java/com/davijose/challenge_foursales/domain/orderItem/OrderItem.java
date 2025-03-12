@@ -15,7 +15,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-@Table(name = "order_item")
+@Table(name = "order_items")
 @Entity(name = "OrderItem")
 @Getter
 @Setter
@@ -26,10 +26,10 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "orders_id")
     private Order order;
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "products_id")
     private Product product;
     @CreationTimestamp
     private Date createdAt;
