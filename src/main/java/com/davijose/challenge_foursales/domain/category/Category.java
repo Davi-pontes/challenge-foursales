@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
-@Table(name = "category")
+@Table(name = "categories")
 @Entity(name = "Category")
 @Getter
 @Setter
@@ -25,7 +25,7 @@ public class Category {
     private UUID id;
     private String name;
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "users_id")
     private User user;
     @CreationTimestamp
     private Date createdAt;
