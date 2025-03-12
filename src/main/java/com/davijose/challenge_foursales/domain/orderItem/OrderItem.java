@@ -1,0 +1,33 @@
+package com.davijose.challenge_foursales.domain.orderItem;
+
+import com.davijose.challenge_foursales.domain.order.Order;
+import com.davijose.challenge_foursales.domain.order.Status;
+import com.davijose.challenge_foursales.domain.product.Product;
+import com.davijose.challenge_foursales.domain.user.User;
+import jakarta.persistence.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+@Table(name = "order_item")
+@Entity(name = "OrderItem")
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(of = "id")
+public class OrderItem {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+}
