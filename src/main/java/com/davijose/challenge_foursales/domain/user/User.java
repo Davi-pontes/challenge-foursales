@@ -7,7 +7,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 @Table(name = "user")
@@ -27,4 +30,8 @@ public class User {
     private String Password;
     @Enumerated(EnumType.STRING)
     private RoleUser roleUser;
+    @CreationTimestamp
+    private Date createdAt;
+    @UpdateTimestamp
+    private Date updateAt;
 }
