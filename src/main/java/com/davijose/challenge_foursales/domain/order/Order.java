@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
-@Table(name = "order")
+@Table(name = "orders")
 @Entity(name = "Order")
 @Getter
 @Setter
@@ -26,7 +26,7 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private Status status;
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "users_id")
     private User user;
     @CreationTimestamp
     private Date createdAt;
