@@ -19,7 +19,7 @@ public class AuthService {
 
     public User validate(LoginRequest loginRequest) {
         User user = userService.findByEmail(loginRequest.email());
-
+        System.out.println(user.getId());
         if (!passwordEncoder.matches(loginRequest.password(),user.getPassword())) {
             throw new BadCredentialsException("Senha incorreta.");
         }
