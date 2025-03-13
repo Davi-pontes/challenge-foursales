@@ -1,5 +1,6 @@
 package com.davijose.challenge_foursales.domain.order;
 
+import com.davijose.challenge_foursales.domain.orderItem.OrderItem;
 import com.davijose.challenge_foursales.domain.user.User;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -10,7 +11,9 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Table(name = "orders")
@@ -26,10 +29,17 @@ public class Order {
     @Enumerated(EnumType.STRING)
     private Status status;
     @ManyToOne
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "user_id")
     private User user;
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems = new ArrayList<>();
     @CreationTimestamp
     private Date createdAt;
     @UpdateTimestamp
-    private Date updateAt;
+    private Date updatedAt;
+
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
 }
