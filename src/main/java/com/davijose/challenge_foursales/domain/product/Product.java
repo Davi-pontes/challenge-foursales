@@ -1,15 +1,11 @@
 package com.davijose.challenge_foursales.domain.product;
 
-import com.davijose.challenge_foursales.domain.category.Category;
-import com.davijose.challenge_foursales.domain.user.User;
+import com.davijose.challenge_foursales.controller.dto.ProductRequest;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -17,7 +13,9 @@ import java.util.UUID;
 @Entity(name = "Product")
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(of = "id")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -26,11 +24,17 @@ public class Product {
     private String description;
     private Float price;
     private int stock;
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+    private String category;
     @CreationTimestamp
     private Date createdAt;
     @UpdateTimestamp
-    private Date updateAt;
+    private Date updatedAt;
+
+    public Product(ProductRequest datas) {
+        this.name = datas.name();
+        this.description = datas.description();
+        this.price = datas.price();
+        this.stock = datas.stock();
+        this.category = datas.category();
+    }
 }
