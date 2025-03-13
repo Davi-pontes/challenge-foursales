@@ -26,13 +26,17 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "orders_id")
+    @JoinColumn(name = "order_id")
     private Order order;
     @ManyToOne
-    @JoinColumn(name = "products_id")
+    @JoinColumn(name = "product_id")
     private Product product;
     @CreationTimestamp
     private Date createdAt;
     @UpdateTimestamp
-    private Date updateAt;
+    private Date updatedAt;
+
+    public OrderItem(Product product) {
+        this.product = product;
+    }
 }
