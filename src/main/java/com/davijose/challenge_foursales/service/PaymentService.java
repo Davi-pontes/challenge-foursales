@@ -26,7 +26,7 @@ public class PaymentService {
     public Order processPayment(BigInteger orderId, PaymentRequest paymentRequest){
         Order order = orderService.findById(orderId);
 
-        if (!order.getStatus().equals(Status.WAITING_PAYMENT)) {
+        if (!order.getStatus().equals(Status.PENDING)) {
             throw new RuntimeException("Order is not in a valid state for payment.");
         }
 
@@ -37,7 +37,7 @@ public class PaymentService {
         order.getOrderItems().forEach(item -> {
             productService.decrementStock(item.getProduct().getId(), 1);
         });
-        order.setStatus(Status.PAYMENT_APPROVED);
+        order.setStatus(Status.APPROVED);
 
         return orderRepository.save(order);
     }

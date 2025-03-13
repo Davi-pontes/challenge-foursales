@@ -9,13 +9,15 @@ import java.util.UUID;
 public record OrderResponse(
         Long id,
         Status status,
-        UUID userId
+        UUID userId,
+        Float total
 ) {
     public OrderResponse(Order order) {
         this(
                 order.getId(),
                 order.getStatus(),
-                order.getUser().getId()
+                order.getUser().getId(),
+                order.getTotal()
         );
     }
 }

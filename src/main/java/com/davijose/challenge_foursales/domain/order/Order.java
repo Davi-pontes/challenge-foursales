@@ -28,6 +28,7 @@ public class Order {
     private Long id;
     @Enumerated(EnumType.STRING)
     private Status status;
+    private Float total;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

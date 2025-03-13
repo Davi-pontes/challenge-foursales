@@ -48,7 +48,7 @@ public class OrderService {
         @Transactional
         public OrderResponse save(OrderRequest orderRequest) {
             Order order = new Order();
-            order.setStatus(Status.WAITING_PAYMENT);
+            order.setStatus(Status.PENDING);
 
             User user = userService.findById(orderRequest.userId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
@@ -62,7 +62,7 @@ public class OrderService {
                 Boolean productInStock = validateStockProduct(product, 1);
 
                 if(!productInStock) {
-                    order.setStatus(Status.CANCELLED);
+                    order.setStatus(Status.CANCELED);
                 }
 
                 BigDecimal productPrice = BigDecimal.valueOf(product.getPrice());
@@ -72,7 +72,8 @@ public class OrderService {
                 OrderItem orderItem = new OrderItem(product);
                 order.addOrderItem(orderItem);
             }
-            System.out.println(totalOrder);
+
+            order.setTotal(totalOrder);
 
             Order savedOrder = orderRepository.save(order);
 
