@@ -19,20 +19,23 @@ import java.util.UUID;
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
-
+    @Transactional
     public  Page<ProductResponse> findProducts(Pageable pagination){
         Page<Product> productsPage = productRepository.findAll(pagination);
 
         return productsPage.map(ProductResponse::new);
     }
+    @Transactional
     public Product findById(UUID id){
         Optional<Product> optionalProduct = productRepository.findById(id);
 
         return optionalProduct.orElse(null);
     }
+    @Transactional
     public Product save(Product product){
         return productRepository.save(product);
     }
+    @Transactional
     public Product update(UUID id, ProductRequestUpdate productRequest) {
         Product productFound = findById(id);
 
@@ -62,5 +65,17 @@ public class ProductService {
     public void delete(UUID id) {
         Product productFound = findById(id);
         productRepository.delete(productFound);
+    }
+    @Transactional
+    public void validateStock(UUID productId) {
+        Product product = findById(productId);
+
+        if (product == null) {
+            throw new RuntimeException("Product not found with id: " + productId);
+        }
+
+        if (product.getStock() <= 0) {
+            throw new RuntimeException("Insufficient stock for product with id: " + productId);
+        }
     }
 }
