@@ -12,9 +12,12 @@ import com.davijose.challenge_foursales.repositories.OrderRepository;
 import com.davijose.challenge_foursales.repositories.ProductRepository;
 import com.davijose.challenge_foursales.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,10 +31,15 @@ public class OrderService {
     private ProductRepository productRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private ProductService productService;
 
-    public List<Order> findAll(){
-        return orderRepository.findAll();
+    @Autowired
+    private UserRepository userRepository;
+    @Transactional
+    public Page<OrderResponse> findByUserId(UUID userId, Pageable pagination){
+        Page<Order> ordersPages = orderRepository.findByUserId(userId, pagination);
+
+        return ordersPages.map(OrderResponse::new);
     }
     public Order findById(UUID id){
         Optional<Order> optionalOrder = orderRepository.findById(id);
@@ -47,12 +55,21 @@ public class OrderService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         order.setUser(user);
 
+        float totalOrder = 0.0f;
+
         for (OrderItemRequest itemRequest : orderRequest.orderItems()) {
-            Product product = productRepository.findById(itemRequest.productId())
-                    .orElseThrow(() -> new RuntimeException("Product not found"));
+            productService.validateStock(itemRequest.productId());
+
+            Product product = productService.findById(itemRequest.productId());
+
+            BigDecimal productPrice = BigDecimal.valueOf(product.getPrice());
+
+            totalOrder += productPrice.floatValue();
+
             OrderItem orderItem = new OrderItem(product);
             order.addOrderItem(orderItem);
         }
+        System.out.println(totalOrder);
 
         Order savedOrder = orderRepository.save(order);
 
