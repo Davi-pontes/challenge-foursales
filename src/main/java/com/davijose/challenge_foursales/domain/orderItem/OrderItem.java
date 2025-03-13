@@ -5,10 +5,7 @@ import com.davijose.challenge_foursales.domain.order.Status;
 import com.davijose.challenge_foursales.domain.product.Product;
 import com.davijose.challenge_foursales.domain.user.User;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -20,24 +17,20 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
-    @JoinColumn(name = "order_id")
+    @JoinColumn(name = "orders_id")
     private Order order;
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "products_id")
     private Product product;
-    private Integer quantity;
     @CreationTimestamp
     private Date createdAt;
     @UpdateTimestamp
-    private Date updatedAt;
-
-    public OrderItem(Product product) {
-        this.product = product;
-    }
+    private Date updateAt;
 }
