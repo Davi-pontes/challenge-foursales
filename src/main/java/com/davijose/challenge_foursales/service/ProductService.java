@@ -3,6 +3,7 @@ package com.davijose.challenge_foursales.service;
 import com.davijose.challenge_foursales.controller.dto.ProductRequestUpdate;
 import com.davijose.challenge_foursales.controller.dto.ProductResponse;
 import com.davijose.challenge_foursales.domain.product.Product;
+import com.davijose.challenge_foursales.error.InsufficientStockException;
 import com.davijose.challenge_foursales.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -77,5 +78,20 @@ public class ProductService {
         if (product.getStock() <= 0) {
             throw new RuntimeException("Insufficient stock for product with id: " + productId);
         }
+    }
+    @Transactional
+    public void decrementStock(UUID productId, int quantity) {
+        Product product = findById(productId);
+
+        if (product == null) {
+            throw new RuntimeException("Product not found with id: " + productId);
+        }
+
+        if (product.getStock() < quantity) {
+            throw new InsufficientStockException("Insufficient stock for product with id: " + productId);
+        }
+
+        product.setStock(product.getStock() - quantity);
+        productRepository.save(product);
     }
 }
