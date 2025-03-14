@@ -1,6 +1,6 @@
 package com.davijose.challenge_foursales.service;
 
-import com.davijose.challenge_foursales.controller.dto.LoginRequest;
+import com.davijose.challenge_foursales.dto.LoginRequest;
 import com.davijose.challenge_foursales.domain.user.User;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;

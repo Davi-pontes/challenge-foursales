@@ -1,9 +1,8 @@
 package com.davijose.challenge_foursales.controller;
 
-import com.davijose.challenge_foursales.controller.dto.OrderRequest;
-import com.davijose.challenge_foursales.controller.dto.OrderResponse;
-import com.davijose.challenge_foursales.controller.dto.UserAverageTicketResponse;
-import com.davijose.challenge_foursales.controller.dto.UserCountResponse;
+import com.davijose.challenge_foursales.dto.OrderRequest;
+import com.davijose.challenge_foursales.dto.OrderResponse;
+import com.davijose.challenge_foursales.dto.UserCountResponse;
 import com.davijose.challenge_foursales.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/order")

@@ -1,7 +1,7 @@
 package com.davijose.challenge_foursales.controller;
 
-import com.davijose.challenge_foursales.controller.dto.LoginRequest;
-import com.davijose.challenge_foursales.controller.dto.LoginResponse;
+import com.davijose.challenge_foursales.dto.LoginRequest;
+import com.davijose.challenge_foursales.dto.LoginResponse;
 import com.davijose.challenge_foursales.domain.user.User;
 import com.davijose.challenge_foursales.service.AuthService;
 import org.springframework.http.ResponseEntity;
