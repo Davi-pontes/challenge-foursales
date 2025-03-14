@@ -1,13 +1,12 @@
 package com.davijose.challenge_foursales.service;
 
-import com.davijose.challenge_foursales.controller.dto.OrderItemRequest;
-import com.davijose.challenge_foursales.controller.dto.OrderRequest;
-import com.davijose.challenge_foursales.controller.dto.OrderResponse;
+import com.davijose.challenge_foursales.controller.dto.*;
 import com.davijose.challenge_foursales.domain.order.Order;
 import com.davijose.challenge_foursales.domain.order.Status;
 import com.davijose.challenge_foursales.domain.orderItem.OrderItem;
 import com.davijose.challenge_foursales.domain.product.Product;
 import com.davijose.challenge_foursales.domain.user.User;
+import com.davijose.challenge_foursales.error.InsufficientStockException;
 import com.davijose.challenge_foursales.repositories.OrderRepository;
 import com.davijose.challenge_foursales.repositories.ProductRepository;
 import com.davijose.challenge_foursales.repositories.UserRepository;
@@ -22,6 +21,7 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -35,65 +35,92 @@ public class OrderService {
     private UserService userService;
 
     @Transactional
-    public Page<OrderResponse> findByUserId(UUID userId, Pageable pagination){
-        Page<Order> ordersPages = orderRepository.findByUserId(userId, pagination);
+    public Page<OrderResponse> findByUserId(String userId, Pageable pagination) {
+        userId = userId.replace("-", "");
+
+        UUID uuid = new UUID(
+                new BigInteger(userId.substring(0, 16), 16).longValue(),
+                new BigInteger(userId.substring(16), 16).longValue());
+
+        Page<Order> ordersPages = orderRepository.findByUserId(uuid, pagination);
 
         return ordersPages.map(OrderResponse::new);
     }
-    public Order findById(BigInteger id){
+
+    public Order findById(BigInteger id) {
         Optional<Order> optionalOrder = orderRepository.findById(id);
 
         return optionalOrder.orElse(null);
     }
-        @Transactional
-        public OrderResponse save(OrderRequest orderRequest) {
-            Order order = new Order();
-            order.setStatus(Status.PENDING);
 
-            User user = userService.findById(orderRequest.userId())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
-            order.setUser(user);
+    @Transactional
+    public OrderResponse save(OrderRequest orderRequest) {
+        Order order = new Order();
+        order.setStatus(Status.PENDING);
 
-            float totalOrder = 0.0f;
+        User user = userService.findById(orderRequest.userId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        order.setUser(user);
 
-            for (OrderItemRequest itemRequest : orderRequest.orderItems()) {
-                Product product = productService.findById(itemRequest.productId());
+        float totalOrder = 0.0f;
 
-                Boolean productInStock = validateStockProduct(product, 1);
+        for (OrderItemRequest itemRequest : orderRequest.orderItems()) {
+            Product product = productService.findById(itemRequest.productId());
 
-                if(!productInStock) {
-                    order.setStatus(Status.CANCELED);
-                }
+            Boolean productInStock = validateStockProduct(product, 1);
 
-                BigDecimal productPrice = BigDecimal.valueOf(product.getPrice());
-
-                totalOrder += productPrice.floatValue();
-
-                OrderItem orderItem = new OrderItem(product);
-                order.addOrderItem(orderItem);
+            if (!productInStock) {
+                order.setStatus(Status.CANCELED);
+                throw new InsufficientStockException("Pedido cancelado estoque insuficiente para o produto: " + product.getName());
             }
 
-            order.setTotal(totalOrder);
+            BigDecimal productPrice = BigDecimal.valueOf(product.getPrice());
+            BigDecimal itemTotal = productPrice.multiply(BigDecimal.valueOf(itemRequest.quantity()));
 
-            Order savedOrder = orderRepository.save(order);
+            totalOrder += productPrice.floatValue();
 
-            return new OrderResponse(savedOrder);
+            OrderItem orderItem = new OrderItem(product, itemRequest.quantity());
+            order.addOrderItem(orderItem);
         }
-        private boolean validateStockProduct(Product product, int quantity) {
-            if (product.getStock() < quantity) {
-                return false;
-            } else {
-                return true;
-            }
+
+        order.setTotal(totalOrder);
+
+        Order savedOrder = orderRepository.save(order);
+
+        return new OrderResponse(savedOrder);
+    }
+
+    private boolean validateStockProduct(Product product, int quantity) {
+        if (product.getStock() < quantity) {
+            return false;
+        } else {
+            return true;
         }
-    public Order update(BigInteger id, Order order){
+    }
+
+    @Transactional
+    public Order update(BigInteger id, Order order) {
         Order orderFound = findById(id);
 
-        if(orderFound != null){
+        if (orderFound != null) {
             return orderRepository.save(order);
-        }else{
+        } else {
             return order;
         }
     }
 
+    public Page<UserCountResponse> getTop5UsersWithMostOrders(Pageable pagination) {
+        Page<Object[]> resultPage = orderRepository.findTopUsersByOrderCount(pagination);
+
+        return resultPage.map(row -> new UserCountResponse(
+                (UUID) row[0],
+                (String) row[1],
+                (Long) row[2]
+        ));
+    }
+
+    public Float getTotalBilledInMonth() {
+        Float valorTotal = orderRepository.findTotalBilledInMonth();
+        return valorTotal != null ? valorTotal : 0.0f;
+    }
 }

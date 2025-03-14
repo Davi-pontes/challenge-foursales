@@ -16,7 +16,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-@Table(name = "orders")
+@Table(name = "orders",indexes = {
+        @Index(name = "idx_order_user_id", columnList = "user_id"),
+        @Index(name = "idx_order_created_at", columnList = "created_at")
+})
 @Entity(name = "Order")
 @Getter
 @Setter

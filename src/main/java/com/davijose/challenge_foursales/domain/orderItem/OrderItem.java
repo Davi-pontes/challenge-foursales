@@ -23,14 +23,20 @@ public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private Integer quantity;
     @ManyToOne
-    @JoinColumn(name = "orders_id")
+    @JoinColumn(name = "order_id")
     private Order order;
     @ManyToOne
-    @JoinColumn(name = "products_id")
+    @JoinColumn(name = "product_id")
     private Product product;
     @CreationTimestamp
     private Date createdAt;
     @UpdateTimestamp
     private Date updateAt;
+
+    public OrderItem(Product product, Integer quantity){
+        this.quantity = quantity;
+        this.product = product;
+    }
 }
