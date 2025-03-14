@@ -51,3 +51,15 @@ mvn clean install
 mvn spring-boot:run
 ```
 A API estará disponível em: http://localhost:8080
+
+## API de Exemplo
+Na raiz do projeto, você encontrará um arquivo contendo a collection do Postman no formato JSON. Essa collection inclui exemplos de requisições para testar as APIs disponíveis. Para utilizá-la, siga os passos abaixo:
+Baixe o arquivo nome_da_collection.json localizado na raiz do projeto.
+
+### Importe a collection no Postman:
+
+1. Primeiro passo: Baixe o arquivo `collection.json`.
+2. Abra o Postman.
+3. Clique em **"Import"**.
+4. Selecione o arquivo JSON e confirme a importação.
+5. Execute as requisições e explore os exemplos.
