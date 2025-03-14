@@ -1,15 +1,16 @@
 package com.davijose.challenge_foursales.service;
 
-import com.davijose.challenge_foursales.controller.dto.*;
 import com.davijose.challenge_foursales.domain.order.Order;
 import com.davijose.challenge_foursales.domain.order.Status;
 import com.davijose.challenge_foursales.domain.orderItem.OrderItem;
 import com.davijose.challenge_foursales.domain.product.Product;
 import com.davijose.challenge_foursales.domain.user.User;
+import com.davijose.challenge_foursales.dto.OrderItemRequest;
+import com.davijose.challenge_foursales.dto.OrderRequest;
+import com.davijose.challenge_foursales.dto.OrderResponse;
+import com.davijose.challenge_foursales.dto.UserCountResponse;
 import com.davijose.challenge_foursales.error.InsufficientStockException;
 import com.davijose.challenge_foursales.repositories.OrderRepository;
-import com.davijose.challenge_foursales.repositories.ProductRepository;
-import com.davijose.challenge_foursales.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,10 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -67,10 +66,9 @@ public class OrderService {
         for (OrderItemRequest itemRequest : orderRequest.orderItems()) {
             Product product = productService.findById(itemRequest.productId());
 
-            Boolean productInStock = validateStockProduct(product, 1);
+            Boolean productInStock = validateStockProduct(product, itemRequest.quantity());
 
             if (!productInStock) {
-                order.setStatus(Status.CANCELED);
                 throw new InsufficientStockException("Pedido cancelado estoque insuficiente para o produto: " + product.getName());
             }
 

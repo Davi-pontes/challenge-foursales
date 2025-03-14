@@ -1,4 +1,4 @@
-package com.davijose.challenge_foursales.controller.dto;
+package com.davijose.challenge_foursales.dto;
 
 import java.math.BigDecimal;
 

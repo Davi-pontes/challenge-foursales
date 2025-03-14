@@ -1,6 +1,6 @@
 package com.davijose.challenge_foursales.service;
 
-import com.davijose.challenge_foursales.controller.dto.PaymentRequest;
+import com.davijose.challenge_foursales.dto.PaymentRequest;
 import com.davijose.challenge_foursales.domain.order.Order;
 import com.davijose.challenge_foursales.domain.order.Status;
 import com.davijose.challenge_foursales.repositories.OrderRepository;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigInteger;
-import java.util.UUID;
 
 @Service
 public class PaymentService {

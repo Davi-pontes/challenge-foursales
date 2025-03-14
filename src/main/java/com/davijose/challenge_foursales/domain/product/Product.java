@@ -1,6 +1,6 @@
 package com.davijose.challenge_foursales.domain.product;
 
-import com.davijose.challenge_foursales.controller.dto.ProductRequest;
+import com.davijose.challenge_foursales.dto.ProductRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;

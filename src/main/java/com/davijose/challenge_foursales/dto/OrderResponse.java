@@ -1,4 +1,4 @@
-package com.davijose.challenge_foursales.controller.dto;
+package com.davijose.challenge_foursales.dto;
 
 import com.davijose.challenge_foursales.domain.order.Order;
 import com.davijose.challenge_foursales.domain.order.Status;

@@ -1,4 +1,4 @@
-package com.davijose.challenge_foursales.controller.dto;
+package com.davijose.challenge_foursales.dto;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

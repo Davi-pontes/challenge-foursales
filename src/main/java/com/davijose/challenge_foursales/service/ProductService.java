@@ -1,7 +1,7 @@
 package com.davijose.challenge_foursales.service;
 
-import com.davijose.challenge_foursales.controller.dto.ProductRequestUpdate;
-import com.davijose.challenge_foursales.controller.dto.ProductResponse;
+import com.davijose.challenge_foursales.dto.ProductRequestUpdate;
+import com.davijose.challenge_foursales.dto.ProductResponse;
 import com.davijose.challenge_foursales.domain.product.Product;
 import com.davijose.challenge_foursales.error.InsufficientStockException;
 import com.davijose.challenge_foursales.repositories.ProductRepository;

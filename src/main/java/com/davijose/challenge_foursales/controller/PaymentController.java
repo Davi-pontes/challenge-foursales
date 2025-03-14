@@ -1,6 +1,6 @@
 package com.davijose.challenge_foursales.controller;
 
-import com.davijose.challenge_foursales.controller.dto.PaymentRequest;
+import com.davijose.challenge_foursales.dto.PaymentRequest;
 import com.davijose.challenge_foursales.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

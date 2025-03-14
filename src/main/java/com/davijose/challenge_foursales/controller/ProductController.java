@@ -1,8 +1,8 @@
 package com.davijose.challenge_foursales.controller;
 
-import com.davijose.challenge_foursales.controller.dto.ProductRequestUpdate;
-import com.davijose.challenge_foursales.controller.dto.ProductResponse;
-import com.davijose.challenge_foursales.controller.dto.ProductRequest;
+import com.davijose.challenge_foursales.dto.ProductRequestUpdate;
+import com.davijose.challenge_foursales.dto.ProductResponse;
+import com.davijose.challenge_foursales.dto.ProductRequest;
 import com.davijose.challenge_foursales.domain.product.Product;
 import com.davijose.challenge_foursales.service.ProductService;
 import jakarta.validation.Valid;
@@ -12,11 +12,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
+import java.net.URI;
 import java.util.UUID;
 
 @RestController
@@ -43,7 +42,7 @@ public class ProductController {
 
         ProductResponse response = new ProductResponse(product);
 
-        var uri = uriBuilder.path("/products/{id}")
+        URI uri = uriBuilder.path("/products/{id}")
                 .buildAndExpand(product.getId())
                 .toUri();
 
