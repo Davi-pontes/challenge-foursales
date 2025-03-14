@@ -1,11 +1,14 @@
 package com.davijose.challenge_foursales.service;
 
-import com.davijose.challenge_foursales.controller.dto.UserAverageTicketResponse;
+import com.davijose.challenge_foursales.dto.UserAverageTicketResponse;
 import com.davijose.challenge_foursales.domain.user.User;
+import com.davijose.challenge_foursales.dto.UserRequest;
+import com.davijose.challenge_foursales.dto.UserResponse;
 import com.davijose.challenge_foursales.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +21,13 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public User save(User user) {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-        return userRepository.save(user);
+    public UserResponse save(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return new UserResponse(user.getId(),user.getName(), user.getEmail(), user.getRoleUser());
     }
 
     public List<User> findAll() {

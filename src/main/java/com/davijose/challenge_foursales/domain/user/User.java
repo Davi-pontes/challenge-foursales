@@ -1,5 +1,7 @@
 package com.davijose.challenge_foursales.domain.user;
 
+import com.davijose.challenge_foursales.dto.ProductRequest;
+import com.davijose.challenge_foursales.dto.UserRequest;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,6 +14,8 @@ import java.util.UUID;
 @Entity(name = "User")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 public class User {
     @Id
@@ -27,4 +31,11 @@ public class User {
     private Date createdAt;
     @UpdateTimestamp
     private Date updatedAt;
+
+    public User(UserRequest datas) {
+        this.name = datas.name();
+        this.email = datas.email();
+        this.password = datas.password();
+        this.roleUser = datas.roleUser();
+    }
 }
