@@ -10,11 +10,13 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
 
 @RestController
+@RequestMapping("/login")
 public class AuthController {
 
     private final JwtEncoder jwtEncoder;
@@ -25,7 +27,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-    @PostMapping("/login")
+    @PostMapping
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         User user = authService.validate(loginRequest);
         var now = Instant.now();

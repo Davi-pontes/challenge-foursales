@@ -48,11 +48,10 @@ public class ProductController {
 
         return ResponseEntity.created(uri).body(response);
     }
-    @PutMapping
+    @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
-    public ResponseEntity<ProductResponse> update(@RequestBody @Valid ProductRequestUpdate datas){
-        Product product = productService.update(datas.id(),datas);
-
+    public ResponseEntity<ProductResponse> update(@PathVariable UUID id, @RequestBody @Valid ProductRequestUpdate datas) {
+        Product product = productService.update(id, datas);
         return ResponseEntity.ok(new ProductResponse(product));
     }
     @DeleteMapping("/{id}")
