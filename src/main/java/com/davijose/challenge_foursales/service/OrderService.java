@@ -35,11 +35,7 @@ public class OrderService {
 
     @Transactional
     public Page<OrderResponse> findByUserId(String userId, Pageable pagination) {
-        userId = userId.replace("-", "");
-
-        UUID uuid = new UUID(
-                new BigInteger(userId.substring(0, 16), 16).longValue(),
-                new BigInteger(userId.substring(16), 16).longValue());
+        UUID uuid = UUID.fromString(userId);
 
         Page<Order> ordersPages = orderRepository.findByUserId(uuid, pagination);
 
@@ -89,11 +85,7 @@ public class OrderService {
     }
 
     private boolean validateStockProduct(Product product, int quantity) {
-        if (product.getStock() < quantity) {
-            return false;
-        } else {
-            return true;
-        }
+        return product.getStock() >= quantity;
     }
 
     @Transactional
